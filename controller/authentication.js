@@ -29,6 +29,13 @@ const login = async (req, res) => {
   }
 };
 
+const isAuthenticated = async (req, res, next) => {
+  try {
+    // const decoded = jwt.decode(req.headers.authorization)
+  } catch (e) {}
+};
+
 module.exports = {
-  login
+  login,
+  isAuthenticated
 };
