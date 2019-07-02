@@ -36,7 +36,7 @@ const createTask = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
-  const id = req.params._id;
+  const id = req.params.id;
 
   const task = await model.deleteOne({
     _id: id
