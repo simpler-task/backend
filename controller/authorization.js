@@ -8,13 +8,11 @@ const authorization = (req, res, next) => {
     req.decoded = decoded;
 
     next();
-    // }?
   } catch (e) {
     res.status(401).send({
       message: "Unauthorized"
     });
   }
-  // }
 };
 
 module.exports = authorization;
