@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const users = require("../models/users");
+const bcrypt = require("bcryptjs");
 
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -11,16 +12,23 @@ const login = async (req, res) => {
     .exec();
 
   if (user) {
-    const token = jwt.sign(
-      {
-        id: result._id,
-        isManager: result.isManager
-      },
-      "xcidic"
-    );
+    const compare = await bcrypt.compareSync(password, user.password);
+    if (compare) {
+      const token = jwt.sign(
+        {
+          id: user._id,
+          isManager: user.isManager
+        },
+        process.env.JWT_SECRET
+      );
 
-    res.send({
-      token
+      return res.send({
+        token
+      });
+    }
+
+    return res.status(401).send({
+      message: "Unathorized"
     });
   } else {
     res.status(401).send({
@@ -29,13 +37,6 @@ const login = async (req, res) => {
   }
 };
 
-const isAuthenticated = async (req, res, next) => {
-  try {
-    // const decoded = jwt.decode(req.headers.authorization)
-  } catch (e) {}
-};
-
 module.exports = {
-  login,
-  isAuthenticated
+  login
 };
